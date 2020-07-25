@@ -21,7 +21,7 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background: #16161a;
+  background: #004643;
   color: #fff;
 }
 
@@ -34,11 +34,11 @@ p {
   font-size: 0.8rem;
 }
 
-#window-title {
+#tb-window-title {
   font-size: 16px;
 }
 
 .icon-dot {
   font-size: 19px;
-  color: #7f5af0;
+  color: #f9bc60;
 }

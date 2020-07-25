@@ -4,11 +4,11 @@ body {
 }
 
 body {
-  border: 2px solid #1c1c20;
+  border: 2px solid #001e1d;
   overflow-y: hidden;
 }
 
-#titlebar {
+#tb-titlebar {
   display: block;
   position: fixed;
   height: 32px;
@@ -16,7 +16,7 @@ body {
   padding: 4px;
 }
 
-#titlebar #drag-region {
+#tb-titlebar #tb-drag-region {
   width: 100%;
   height: 100%;
   -webkit-app-region: drag;
@@ -24,7 +24,7 @@ body {
   grid-template-columns: auto 138px;
 }
 
-.maximized #titlebar {
+.tb-maximized #tb-titlebar {
   width: 100%;
   padding: 0;
 }
@@ -36,7 +36,7 @@ body {
   overflow-y: auto;
 }
 
-#window-title {
+#tb-window-title {
   grid-column: 1;
   display: flex;
   align-items: center;
@@ -45,18 +45,18 @@ body {
   font-size: 12px;
 }
 
-#window-title span {
+#tb-window-title span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   line-height: 1.5;
 }
 
-.maximized #window-title {
+.tb-maximized #tb-window-title {
   margin-left: 12px;
 }
 
-#window-controls {
+#tb-window-controls {
   display: grid;
   grid-template-columns: repeat(3, 46px);
   position: absolute;
@@ -66,7 +66,7 @@ body {
   -webkit-app-region: no-drag;
 }
 
-#window-controls .button {
+#tb-window-controls .tb-button {
   grid-row: 1 / span 1;
   display: flex;
   justify-content: center;
@@ -76,48 +76,48 @@ body {
   user-select: none;
 }
 
-#window-controls .button:hover {
+#tb-window-controls .tb-button:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-#window-controls .button:active {
+#tb-window-controls .tb-button:active {
   background: rgba(255, 255, 255, 0.2);
 }
 
-#close-button:hover {
+#tb-close-button:hover {
   background: #e81123 !important;
 }
 
-#close-button:active {
+#tb-close-button:active {
   background: #f1707a !important;
 }
 
-#close-button:active .icon {
+#tb-close-button:active .tb-icon {
   filter: invert(1);
 }
 
-#min-button {
+#tb-min-button {
   grid-column: 1;
 }
 
-#max-button,
-#restore-button {
+#tb-max-button,
+#tb-restore-button {
   grid-column: 2;
 }
 
-#close-button {
+#tb-close-button {
   grid-column: 3;
 }
 
-#restore-button {
+#tb-restore-button {
   display: none !important;
 }
 
-.maximized #restore-button {
+.tb-maximized #tb-restore-button {
   display: flex !important;
 }
 
-.maximized #max-button {
+.tb-maximized #tb-max-button {
   display: none;
 }
 
@@ -127,7 +127,7 @@ body {
   (device-pixel-ratio: 2),
   (-webkit-device-pixel-ratio: 3),
   (device-pixel-ratio: 3) {
-  #window-controls .icon {
+  #tb-window-controls .tb-icon {
     width: 10px;
     height: 10px;
   }

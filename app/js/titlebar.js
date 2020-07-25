@@ -13,21 +13,19 @@ window.onbeforeunload = (event) => {
 };
 
 function handleWindowControls() {
-  document.getElementById("min-button").addEventListener("click", (event) => {
+  document.getElementById("tb-min-button").addEventListener("click", (event) => {
     win.minimize();
   });
 
-  document.getElementById("max-button").addEventListener("click", (event) => {
+  document.getElementById("tb-max-button").addEventListener("click", (event) => {
     win.maximize();
   });
 
-  document
-    .getElementById("restore-button")
-    .addEventListener("click", (event) => {
-      win.unmaximize();
-    });
+  document.getElementById("tb-restore-button").addEventListener("click", (event) => {
+    win.unmaximize();
+  });
 
-  document.getElementById("close-button").addEventListener("click", (event) => {
+  document.getElementById("tb-close-button").addEventListener("click", (event) => {
     win.close();
   });
 
@@ -37,9 +35,9 @@ function handleWindowControls() {
 
   function toggleMaxRestoreButtons() {
     if (win.isMaximized()) {
-      document.body.classList.add("maximized");
+      document.body.classList.add("tb-maximized");
     } else {
-      document.body.classList.remove("maximized");
+      document.body.classList.remove("tb-maximized");
     }
   }
 }
