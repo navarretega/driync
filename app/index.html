@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'" />
     <link rel="stylesheet" href="css/bulma.css" />
+    <link rel="stylesheet" href="css/all.min.css" />
     <link rel="stylesheet" href="css/simplebar.css" />
     <link rel="stylesheet" href="css/titlebar.css" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
+
+  <!-- <body class="has-navbar-fixed-bottom"> -->
+
   <body>
     <!-- Titlebar -->
     <header id="tb-titlebar">
@@ -91,7 +95,94 @@
     </header>
     <!-- Titlebar -->
 
-    <div id="main"></div>
+    <div id="main">
+      <div class="drync">
+        <div class="section1">
+          <h6>Choose a folder to continously back up to Google Drive.</h6>
+          <div class="file has-name is-fullwidth">
+            <label class="file-label">
+              <input class="file-input" type="file" name="resume" />
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Choose a folder...
+                </span>
+              </span>
+              <span class="file-name">
+                /home/alex/documents/main
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="section2">
+          <h6>Which files or directories would you like to exclude?</h6>
+          <textarea
+            class="textarea"
+            placeholder="node_modules/
+/myapp/android/buid/
+*.py
+assets/*.mp4"
+          ></textarea>
+          <p class="help">One filter per line</p>
+        </div>
+
+        <div class="section3">
+          <h6>How often do you want to sync?</h6>
+          <div class="field has-addons">
+            <p class="control">
+              <input class="input" type="text" placeholder="60" />
+            </p>
+            <p class="control">
+              <a class="button is-static">
+                minutes
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="section4">
+          <h5>Total size ~ <span id="total-size">4 GB</span></h5>
+        </div>
+
+        <!-- <div class="section5">
+          <div class="buttons">
+            <button id="btn-save" class="button is-fullwidth">Save</button>
+            <button id="btn-test" class="button is-fullwidth">Test</button>
+          </div>
+        </div> -->
+
+        <div class="columns is-mobile">
+          <div id="col1" class="column">
+            <button id="btn-save" class="button is-fullwidth">Save</button>
+          </div>
+          <div id="col2" class="column">
+            <button id="btn-test" class="button is-fullwidth">Test</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- <nav class="navbar is-fixed-bottom">
+        <div class="tabs is-toggle is-fullwidth is-medium">
+          <ul>
+            <li class="is-active">
+              <a>
+                <span class="icon"><i class="fas fa-home" aria-hidden="true"></i></span>
+                <span>Home</span>
+              </a>
+            </li>
+            <li>
+              <a>
+                <span class="icon"><i class="fas fa-cog" aria-hidden="true"></i></span>
+                <span>Settings</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav> -->
+    </div>
 
     <script src="js/simplebar.min.js"></script>
     <script src="js/titlebar.js"></script>

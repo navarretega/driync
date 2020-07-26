@@ -25,15 +25,6 @@ body {
   color: #fff;
 }
 
-h1 {
-  font-size: 2rem;
-}
-
-p {
-  margin-top: 1rem;
-  font-size: 0.8rem;
-}
-
 #tb-window-title {
   font-size: 16px;
 }
@@ -41,4 +32,133 @@ p {
 .icon-dot {
   font-size: 19px;
   color: #f9bc60;
+}
+
+/* Overwriting Bulma */
+
+.navbar.is-fixed-bottom {
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background-color: #001e1d;
+}
+
+.tabs.is-toggle li:first-child a,
+.tabs.is-toggle li:last-child a {
+  border-radius: 0px;
+}
+
+.tabs.is-toggle li a {
+  background-color: #001e1d;
+  color: rgba(171, 209, 198, 0.2);
+  border-width: 0px 0px 2px 0px;
+  border-color: #001e1d;
+}
+
+.tabs.is-toggle li.is-active a {
+  background-color: #001e1d;
+  color: #abd1c6;
+  border-width: 0px 0px 2px 0px;
+  border-color: #001e1d;
+}
+
+.tabs.is-toggle a:hover {
+  background-color: #001414;
+  border-color: #001414;
+}
+
+.button {
+  font-family: "Poppins Medium", sans-serif;
+}
+
+.textarea,
+.file-cta,
+.button.is-static {
+  background-color: #abd1c6;
+  border-color: #abd1c6;
+}
+
+.file-cta,
+.button.is-static {
+  color: #001e1d;
+}
+
+.file-name,
+.input {
+  color: #abd1c6;
+  border-width: 1.5px;
+  border-color: #abd1c6;
+  background-color: transparent;
+  opacity: 50%;
+}
+
+.textarea::placeholder {
+  color: #001e1d;
+  opacity: 50%;
+}
+
+.input::placeholder {
+  color: #abd1c6;
+}
+
+.help {
+  color: #abd1c6;
+}
+
+.file-label,
+.textarea,
+.input,
+.button.is-static {
+  font-size: 14px;
+}
+
+/* Custom */
+
+.drync {
+  padding: 20px;
+}
+
+.drync h6 {
+  color: #fffffe;
+}
+
+.drync .section1,
+.drync .section2,
+.drync .section3,
+.drync .section4 {
+  margin-bottom: 23px;
+}
+
+.drync .section1 h6,
+.drync .section2 h6,
+.drync .section3 h6 {
+  margin-bottom: 10px;
+}
+
+.drync #btn-save {
+  background-color: #f9bc60;
+  border-color: transparent;
+  color: #001e1d;
+  /* padding: 20px 40px;
+  margin-right: 30px; */
+}
+
+.drync #btn-save:hover {
+  background-color: #ffb23e;
+}
+
+.drync #btn-test {
+  background-color: transparent;
+  border-width: 1.5px;
+  border-color: #f9bc60;
+  color: #fffffe;
+  /* padding: 20px 40px; */
+}
+
+.drync #btn-test:hover {
+  background-color: #003634;
+}
+
+#total-size {
+  font-family: "Poppins Bold", sans-serif;
 }
