@@ -13,5 +13,7 @@
     "electron": "^9.0.5",
     "nodemon": "^2.0.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "sweetalert2": "^9.17.1"
+  }
 }

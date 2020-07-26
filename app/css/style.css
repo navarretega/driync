@@ -1,3 +1,5 @@
+/* Default CSS */
+
 * {
   margin: 0;
   padding: 0;
@@ -34,7 +36,7 @@ body {
   color: #f9bc60;
 }
 
-/* Overwriting Bulma */
+/* Overwriting CSS */
 
 .navbar.is-fixed-bottom {
   left: 2px;
@@ -112,6 +114,16 @@ body {
   font-size: 14px;
 }
 
+.swal2-icon.swal2-warning {
+  color: #f9bc60 !important;
+  border-color: #fcb64d !important;
+}
+
+.swal2-container.swal2-backdrop-show,
+.swal2-container.swal2-noanimation {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
 /* Custom */
 
 .drync {
@@ -161,4 +173,8 @@ body {
 
 #total-size {
   font-family: "Poppins Bold", sans-serif;
+}
+
+#form-buttons {
+  margin-top: 30px;
 }

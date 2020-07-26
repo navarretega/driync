@@ -1,13 +1,13 @@
-const { app, BrowserWindow } = require("electron");
+const { app, shell, BrowserWindow } = require("electron");
 
 let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 500,
-    height: 600,
-    minWidth: 400,
-    minHeight: 500,
+    height: 603,
+    minWidth: 500,
+    minHeight: 603,
     frame: false,
     icon: `${__dirname}/app/assets/icon2.png`,
     webPreferences: {
@@ -17,6 +17,11 @@ function createWindow() {
   });
 
   mainWindow.loadFile(`${__dirname}/app/index.html`);
+
+  mainWindow.webContents.on("new-window", function (event, url) {
+    event.preventDefault();
+    shell.openExternal(url);
+  });
 
   // mainWindow.webContents.openDevTools();
 
