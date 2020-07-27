@@ -1,6 +1,17 @@
-const { app, shell, BrowserWindow } = require("electron");
+const { app, shell, BrowserWindow, ipcMain } = require("electron");
+const Store = require("./Store");
 
 let mainWindow;
+const store = new Store({
+  configName: "user-settings",
+  defaults: {
+    settings: {
+      folder: "",
+      exclude: "",
+      syncFrequency: 30,
+    },
+  },
+});
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -23,6 +34,11 @@ function createWindow() {
     shell.openExternal(url);
   });
 
+  mainWindow.webContents.on("dom-ready", () => {
+    mainWindow.webContents.send("settings:get", store.get("settings"));
+    // mainWindow.webContents.send("test", store.path);
+  });
+
   // mainWindow.webContents.openDevTools();
 
   mainWindow.on("closed", () => {
@@ -31,6 +47,12 @@ function createWindow() {
 }
 
 app.on("ready", createWindow);
+
+// Set settings
+ipcMain.on("settings:set", (e, value) => {
+  store.set("settings", value);
+  mainWindow.webContents.send("settings:get", store.get("settings"));
+});
 
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") {

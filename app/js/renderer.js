@@ -1,7 +1,9 @@
 // ** Imports ** //
 
+const { ipcRenderer } = require("electron");
 const Swal = require("sweetalert2");
 const { exec } = require("child_process");
+const path = require("path");
 
 // ** Variables ** //
 
@@ -70,12 +72,7 @@ async function onSubmitForm(e) {
   const syncMinutes = syncEle.value;
 
   if (!dir || !syncMinutes) {
-    showAlert(
-      "#e16162",
-      "warning",
-      "Hold on",
-      "You need to select a valid directory and how often you want you want to sync!"
-    );
+    showAlert("#e16162", "warning", "Hold on", "You need to select a valid directory!");
     return;
   }
 
@@ -94,6 +91,14 @@ async function onSubmitForm(e) {
 
   // Save Button was clicked
   if (e.submitter.id === "btn-save") {
+    // Put settings
+    ipcRenderer.send("settings:set", {
+      folder: dir,
+      exclude: excludeFilters, //.split("\n"),
+      syncFrequency: syncMinutes,
+    });
+    showAlert("#e16162", "success", "Settings saved!", "");
+
     // Test Button was clicked
   } else {
     // Getting directory size
@@ -105,7 +110,32 @@ async function onSubmitForm(e) {
   }
 }
 
+// Run notifications
+// setInterval(() => {
+
+// }, 2000)
+
+function notify(title, body) {
+  new Notification(title, {
+    body: body,
+    icon: path.resolve("./app/assets/icon2.png"),
+  });
+}
+
 // ** Event Listeners ** //
+
+// Get settings
+ipcRenderer.on("settings:get", (e, settings) => {
+  const { folder, exclude, syncFrequency } = settings;
+
+  folderNameEle.value = folder;
+  folderNameEle.innerText = folder;
+  folderNameEle.setAttribute("title", folder);
+
+  excludeEle.value = exclude;
+
+  syncEle.value = syncFrequency;
+});
 
 folderEle.addEventListener("click", onClickFolder);
 formEle.addEventListener("submit", (e) => onSubmitForm(e));
