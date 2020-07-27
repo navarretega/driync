@@ -1,7 +1,9 @@
-const { app, shell, BrowserWindow, ipcMain } = require("electron");
+const { app, shell, BrowserWindow, ipcMain, Menu } = require("electron");
 const Store = require("./Store");
+const AppTray = require("./AppTray");
 
 let mainWindow;
+let tray;
 const store = new Store({
   configName: "user-settings",
   defaults: {
@@ -40,6 +42,18 @@ function createWindow() {
   });
 
   // mainWindow.webContents.openDevTools();
+
+  mainWindow.on("close", (e) => {
+    if (!app.isQuitting) {
+      e.preventDefault();
+      mainWindow.hide();
+    }
+    return true;
+  });
+
+  // Tray
+  const icon = `${__dirname}/app/assets/tray_icon.png`;
+  tray = new AppTray(icon, mainWindow);
 
   mainWindow.on("closed", () => {
     mainWindow = null;

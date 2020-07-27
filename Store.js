@@ -4,6 +4,7 @@ const fs = require("fs");
 
 class Store {
   constructor(options) {
+    // C:\Users\Alex\AppData\Roaming\driync
     const userDataPath = (electron.app || electron.remote.app).getPath("userData");
 
     this.path = path.join(userDataPath, options.configName + ".json");
