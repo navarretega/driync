@@ -96,99 +96,26 @@
     <!-- Titlebar -->
 
     <div id="main">
-      <form id="driync-form">
-        <div class="drync">
-          <div class="section1">
-            <h6>Choose a folder to continously back up to Google Drive.</h6>
-            <div class="file has-name is-fullwidth">
-              <label class="file-label">
-                <input id="folder" class="file-input" />
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <i class="fas fa-upload"></i>
-                  </span>
-                  <span class="file-label">
-                    Choose
-                  </span>
-                </span>
-                <span id="folder-name" class="file-name"> </span>
-              </label>
-            </div>
-          </div>
-
-          <div class="section2">
-            <h6>Which files or directories would you like to exclude?</h6>
-            <textarea
-              id="exclude-filters"
-              class="textarea"
-              placeholder="node_modules/
-/myapp/android/buid/
-*.py
-assets/*.mp4"
-            ></textarea>
-            <p class="help">Make sure to add a trailing / to reference a directory!</p>
-          </div>
-
-          <div class="section3">
-            <h6>How often do you want to sync?</h6>
-            <div class="field has-addons">
-              <p class="control">
-                <input id="sync-minutes" class="input" type="number" />
-              </p>
-              <p class="control">
-                <a class="button is-static">
-                  minutes
-                </a>
-              </p>
-            </div>
-          </div>
-
-          <!-- <div class="section4">
-            <h5>Total size ~ <span id="total-size">4 GB</span></h5>
-          </div> -->
-
-          <!-- <div class="section5">
-          <div class="buttons">
-            <button id="btn-save" class="button is-fullwidth">Save</button>
-            <button id="btn-test" class="button is-fullwidth">Test</button>
-          </div>
-        </div> -->
-
-          <div id="form-buttons" class="columns is-mobile">
-            <div id="col1" class="column">
-              <button id="btn-save" class="button is-fullwidth" type="submit">Save</button>
-            </div>
-            <div id="col2" class="column">
-              <button id="btn-test" class="button is-fullwidth" type="submit">Test</button>
-            </div>
-          </div>
-        </div>
-      </form>
-      <!-- <nav class="navbar is-fixed-bottom">
-        <div class="tabs is-toggle is-fullwidth is-medium">
-          <ul>
-            <li class="is-active">
-              <a>
-                <span class="icon"><i class="fas fa-home" aria-hidden="true"></i></span>
-                <span>Home</span>
-              </a>
-            </li>
-            <li>
-              <a>
-                <span class="icon"><i class="fas fa-cog" aria-hidden="true"></i></span>
-                <span>Settings</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav> -->
+      <br />
+      <p>Here's the list of folders & files that will be backed up</p>
+      <p id="total-size"></p>
+      <br />
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Size</th>
+            <th>Directory</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
     </div>
 
     <script src="js/simplebar.min.js"></script>
     <script src="js/titlebar.js"></script>
-    <!-- <script src="js/renderer.js"></script> -->
     <script>
-      require("./js/renderer.js");
+      require("./js/rendererSecondary.js");
     </script>
   </body>
 </html>

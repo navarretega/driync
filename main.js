@@ -3,6 +3,7 @@ const Store = require("./Store");
 const AppTray = require("./AppTray");
 
 let mainWindow;
+let secondaryWindow;
 let tray;
 const store = new Store({
   configName: "user-settings",
@@ -15,6 +16,7 @@ const store = new Store({
   },
 });
 
+// Main Window
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 500,
@@ -60,12 +62,41 @@ function createWindow() {
   });
 }
 
+// Secondary Window
+function createSecondaryWindow() {
+  secondaryWindow = new BrowserWindow({
+    show: false,
+    frame: false,
+    icon: `${__dirname}/app/assets/icon2.png`,
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true,
+    },
+  });
+
+  secondaryWindow.maximize();
+  secondaryWindow.loadFile(`${__dirname}/app/secondary.html`);
+  secondaryWindow.show();
+
+  secondaryWindow.on("closed", () => {
+    secondaryWindow = null;
+  });
+}
+
 app.on("ready", createWindow);
 
-// Set settings
+// Main Window - Set settings
 ipcMain.on("settings:set", (e, value) => {
   store.set("settings", value);
   mainWindow.webContents.send("settings:get", store.get("settings"));
+});
+
+// Secondary Window - lsjson
+ipcMain.on("lsjson:set", (e, value) => {
+  createSecondaryWindow();
+  secondaryWindow.webContents.on("dom-ready", () => {
+    secondaryWindow.webContents.send("lsjson:get", value);
+  });
 });
 
 app.on("window-all-closed", function () {

@@ -13,6 +13,7 @@ const folderNameEle = document.getElementById("folder-name");
 const excludeEle = document.getElementById("exclude-filters");
 const syncEle = document.getElementById("sync-minutes");
 const formEle = document.getElementById("driync-form");
+let isValid = false;
 
 // ** Functions ** //
 
@@ -76,7 +77,20 @@ async function onSubmitForm(e) {
     return;
   }
 
-  // Check if rclone is setup
+  isValid = verifyRCLONE();
+  if (!isValid) return;
+
+  if (e.submitter.id === "btn-save") {
+    // Save Button was clicked
+    saveButton(dir, excludeFilters, syncMinutes);
+  } else {
+    // Test Button was clicked
+    testButton(dir, excludeFilters);
+  }
+}
+
+// Check if rclone is setup
+async function verifyRCLONE() {
   const rclone_res = await execShellCommand(`rclone about gdrive:`);
   if (rclone_res["err"]) {
     showAlert(
@@ -86,35 +100,52 @@ async function onSubmitForm(e) {
       "Make sure rclone is installed, and has a config. name of 'gdrive'!",
       "<a target='_blank' href='https://rclone.org/drive/'>Click here to install</a>"
     );
-    return;
+    return false;
   }
+  return true;
+}
 
-  // Save Button was clicked
-  if (e.submitter.id === "btn-save") {
-    // Put settings
-    ipcRenderer.send("settings:set", {
-      folder: dir,
-      exclude: excludeFilters, //.split("\n"),
-      syncFrequency: syncMinutes,
+// Handle event when the save button is clicked
+function saveButton(dir, excludeFilters, syncMinutes) {
+  // Put settings
+  ipcRenderer.send("settings:set", {
+    folder: dir,
+    exclude: excludeFilters,
+    syncFrequency: syncMinutes,
+  });
+  showAlert("#e16162", "success", "Settings saved!", "");
+  // clearSaveInterval();
+}
+
+// Handle event when the test button is clicked
+async function testButton(dir, excludeFilters) {
+  let cmd = "rclone lsjson -R";
+  if (excludeFilters) {
+    excludeFilters.split("\n").map((filter) => {
+      if (filter) {
+        cmd = `${cmd} --exclude "${filter}"`;
+      }
     });
-    showAlert("#e16162", "success", "Settings saved!", "");
-
-    // Test Button was clicked
+  }
+  cmd = `${cmd} "${dir}"`;
+  const ls_res = await execShellCommand(cmd);
+  if (!ls_res["err"]) {
+    ipcRenderer.send("lsjson:set", ls_res["msg"]);
   } else {
-    // Getting directory size
-    const size_res = await execShellCommand(`du -sh ${dir} | cut -f1`);
-    if (!size_res["err"]) {
-      const size = size_res["msg"].trim();
-      console.log(size);
-    }
+    console.log(ls_res["err"]);
   }
 }
 
-// Run notifications
-// setInterval(() => {
+// Run every X minutes
+// const saveInterval = setInterval(() => {
+//   console.log("isValid", isValid);
+// }, 10000);
 
-// }, 2000)
+// function clearSaveInterval() {
+//   clearInterval(saveInterval);
+// }
 
+// Send dektops notifications
 function notify(title, body) {
   new Notification(title, {
     body: body,
@@ -127,6 +158,8 @@ function notify(title, body) {
 // Get settings
 ipcRenderer.on("settings:get", (e, settings) => {
   const { folder, exclude, syncFrequency } = settings;
+
+  if (folder) isValid = true;
 
   folderNameEle.value = folder;
   folderNameEle.innerText = folder;

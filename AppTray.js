@@ -1,5 +1,8 @@
 const { app, Menu, Tray } = require("electron");
 
+// There appears to be a bug whenever you try to quit the app while the developer tools are open
+// Sometimes it won't close the app until you close the developer tools
+
 class AppTray extends Tray {
   constructor(icon, mainWindow) {
     super(icon);

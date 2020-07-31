@@ -124,6 +124,16 @@ body {
   background: rgba(0, 0, 0, 0.7) !important;
 }
 
+.table {
+  background-color: transparent;
+  color: #abd1c6;
+}
+
+.table thead td,
+.table thead th {
+  color: #fffffe;
+}
+
 /* Custom */
 
 .drync {
