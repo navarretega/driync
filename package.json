@@ -1,19 +1,24 @@
 {
   "name": "driync",
   "version": "1.0.0",
-  "description": "",
+  "description": "A 'Backup & Sync from Google' alternative with the ability to exclude directories.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dev": "nodemon --exec electron ."
+    "dev": "nodemon --exec electron .",
+    "dist": "electron-builder"
   },
-  "author": "",
+  "author": "brisai",
   "license": "ISC",
   "devDependencies": {
     "electron": "^9.0.5",
+    "electron-builder": "^22.8.0",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
     "sweetalert2": "^9.17.1"
+  },
+  "build": {
+    "appId": "brisai.driync"
   }
 }
