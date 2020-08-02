@@ -1,9 +1,11 @@
 // ** Imports ** //
 
+const electron = require("electron");
 const { ipcRenderer } = require("electron");
 const Swal = require("sweetalert2");
 const { exec } = require("child_process");
 const path = require("path");
+const fs = require("fs");
 
 // ** Variables ** //
 
@@ -13,14 +15,18 @@ const folderNameEle = document.getElementById("folder-name");
 const excludeEle = document.getElementById("exclude-filters");
 const syncEle = document.getElementById("sync-minutes");
 const formEle = document.getElementById("driync-form");
-let isValid = false;
+const btnSave = document.getElementById("btn-save");
+const btnTest = document.getElementById("btn-test");
+const userDataPath = (electron.app || electron.remote.app).getPath("userData");
+let saveInterval;
+let isRunning = false;
 
 // ** Functions ** //
 
 // Run Shell Commands
 function execShellCommand(cmd) {
   return new Promise((resolve, reject) => {
-    exec(cmd, (error, stdout, stderr) => {
+    exec(cmd, { maxBuffer: 1024 * 1024 * 5 }, (error, stdout, stderr) => {
       if (error) {
         resolve({ err: true, msg: error.message });
       }
@@ -77,8 +83,7 @@ async function onSubmitForm(e) {
     return;
   }
 
-  isValid = verifyRCLONE();
-  if (!isValid) return;
+  if (!verifyRCLONE()) return;
 
   if (e.submitter.id === "btn-save") {
     // Save Button was clicked
@@ -90,6 +95,7 @@ async function onSubmitForm(e) {
 }
 
 // Check if rclone is setup
+// TODO - Dynamically let user assign rclone config name
 async function verifyRCLONE() {
   const rclone_res = await execShellCommand(`rclone about gdrive:`);
   if (rclone_res["err"]) {
@@ -107,6 +113,7 @@ async function verifyRCLONE() {
 
 // Handle event when the save button is clicked
 function saveButton(dir, excludeFilters, syncMinutes) {
+  btnSave.classList.add("is-loading");
   // Put settings
   ipcRenderer.send("settings:set", {
     folder: dir,
@@ -114,11 +121,13 @@ function saveButton(dir, excludeFilters, syncMinutes) {
     syncFrequency: syncMinutes,
   });
   showAlert("#e16162", "success", "Settings saved!", "");
-  // clearSaveInterval();
+  setCustomInterval(dir, excludeFilters, syncMinutes);
+  btnSave.classList.remove("is-loading");
 }
 
 // Handle event when the test button is clicked
 async function testButton(dir, excludeFilters) {
+  btnTest.classList.add("is-loading");
   let cmd = "rclone lsjson -R";
   if (excludeFilters) {
     excludeFilters.split("\n").map((filter) => {
@@ -128,22 +137,60 @@ async function testButton(dir, excludeFilters) {
     });
   }
   cmd = `${cmd} "${dir}"`;
+  // Adding output to file instead of stdout to prevent maxBuffer errors
+  const filePath = path.join(userDataPath, "driync.files.txt");
+  cmd = `${cmd} > ${filePath}`;
   const ls_res = await execShellCommand(cmd);
   if (!ls_res["err"]) {
-    ipcRenderer.send("lsjson:set", ls_res["msg"]);
+    ipcRenderer.send("lsjson:set", filePath);
   } else {
-    console.log(ls_res["err"]);
+    // console.log(ls_res["msg"]);
+    showAlert("#e16162", "info", "Sorry", "There was an error.");
   }
+  btnTest.classList.remove("is-loading");
 }
 
-// Run every X minutes
-// const saveInterval = setInterval(() => {
-//   console.log("isValid", isValid);
-// }, 10000);
+// Set interval
+function setCustomInterval(dir, excludeFilters, syncMinutes) {
+  const duration = parseInt(syncMinutes) * 60000;
+  if (saveInterval) {
+    clearInterval(saveInterval);
+  }
+  saveInterval = setInterval(() => {
+    if (isRunning) {
+      console.log("Sync already running");
+    } else {
+      console.log("Syncing...");
+      sync(dir, excludeFilters);
+    }
+  }, duration);
+}
 
-// function clearSaveInterval() {
-//   clearInterval(saveInterval);
-// }
+async function sync(dir, excludeFilters) {
+  isRunning = true;
+  let cmd = "rclone sync -v";
+  if (excludeFilters) {
+    excludeFilters.split("\n").map((filter) => {
+      if (filter) {
+        cmd = `${cmd} --exclude "${filter}"`;
+      }
+    });
+  }
+  cmd = `${cmd} "${dir}" "gdrive:"`;
+  // stderr
+  const filePath = path.join(userDataPath, "driync.log");
+  cmd = `${cmd} 2> "${filePath}"`;
+  // Exec command
+  const sync_res = await execShellCommand(cmd);
+  let notificationTitle;
+  if (!sync_res["err"]) {
+    notificationTitle = "Syncing successfully completed!";
+  } else {
+    notificationTitle = "Error while syncing!";
+  }
+  notify(notificationTitle, `For more details, see here: ${filePath}`);
+  isRunning = false;
+}
 
 // Send dektops notifications
 function notify(title, body) {
@@ -159,7 +206,9 @@ function notify(title, body) {
 ipcRenderer.on("settings:get", (e, settings) => {
   const { folder, exclude, syncFrequency } = settings;
 
-  if (folder) isValid = true;
+  if (folder) {
+    setCustomInterval(folder, exclude, syncFrequency);
+  }
 
   folderNameEle.value = folder;
   folderNameEle.innerText = folder;

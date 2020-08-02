@@ -1,7 +1,10 @@
 const { ipcRenderer } = require("electron");
+const fs = require("fs");
 
 const tbodyEle = document.getElementById("tbody");
+const totalLengthEle = document.getElementById("total-length");
 const totalSizeEle = document.getElementById("total-size");
+const fileInfo = document.getElementById("file-info-path");
 
 function compare(a, b) {
   const pathA = a["Path"].toUpperCase();
@@ -26,16 +29,14 @@ function formatBytes(bytes, decimals) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
-// tbodyEle.innerHTML =
-//   "<tr>" + "<td>" + "/app/myapp/home" + "</td>" + "<td>" + "345655" + "</td>" + "</tr>";
-
-ipcRenderer.on("lsjson:get", (e, values) => {
+ipcRenderer.on("lsjson:get", (e, filePath) => {
   let totalSize = 0;
+  const values = fs.readFileSync(filePath, { encoding: "utf8", flag: "r" });
   data = JSON.parse(values);
   data.sort(compare);
   let rows = "";
-  data.map((d) => {
-    totalSize += d["Size"];
+  data.map((d) => (totalSize += d["Size"]));
+  data.slice(0, 500).map((d) => {
     rows +=
       "<tr>" +
       "<td>" +
@@ -50,6 +51,10 @@ ipcRenderer.on("lsjson:get", (e, values) => {
       "</tr>";
   });
   totalSize = formatBytes(totalSize);
+  totalLengthEle.innerText = `Total number of files: ${data.length}`;
   totalSizeEle.innerText = `Total size: ${totalSize}`;
   tbodyEle.innerHTML = rows;
+  if (data.length > 500) {
+    fileInfo.innerText = `Showing the first 500 rows. If you want to see all of them, please check the following file: ${filePath}`;
+  }
 });
