@@ -192,11 +192,11 @@ async function sync(dir, excludeFilters) {
   isRunning = false;
 }
 
-// Send dektops notifications
+// Send desktops notifications
 function notify(title, body) {
   new Notification(title, {
     body: body,
-    icon: path.resolve("./app/assets/icon2.png"),
+    icon: `${__dirname}/../assets/icon.png`,
   });
 }
 

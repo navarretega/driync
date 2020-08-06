@@ -2,6 +2,8 @@ const { app, shell, BrowserWindow, ipcMain, Menu } = require("electron");
 const Store = require("./Store");
 const AppTray = require("./AppTray");
 
+app.setAppUserModelId("brisai.driync");
+
 let mainWindow;
 let secondaryWindow;
 let tray;
@@ -24,7 +26,7 @@ function createWindow() {
     minWidth: 500,
     minHeight: 603,
     frame: false,
-    icon: `${__dirname}/app/assets/icon2.png`,
+    icon: `${__dirname}/app/assets/icon.png`,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
@@ -67,7 +69,7 @@ function createSecondaryWindow() {
   secondaryWindow = new BrowserWindow({
     show: false,
     frame: false,
-    icon: `${__dirname}/app/assets/icon2.png`,
+    icon: `${__dirname}/app/assets/icon.png`,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
